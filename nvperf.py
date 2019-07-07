@@ -1,16 +1,30 @@
 #! /usr/bin/env python
 # importing CSV module
 import csv
+import argparse
 
 # CSV file name
-filename_1 = "./inputs/mmf-baseline.csv"
-filename_2 = "./inputs/mmf-flopeff.csv"
+# filename_1 = "./inputs/mmf-baseline.csv"
+# filename_2 = "./inputs/mmf-flopeff.csv"
 
 # filename_1 = "C:\\Users\\sweth\\Desktop\\My Python\\csvs\\mmf-baseline.csv"
 # filename_2 = "C:\\Users\\sweth\\Desktop\\My Python\\csvs\\mmf-flopeff.csv"
+
+# argumented parser
+def parseArguments(): 
+	parser = argparse.ArgumentParser(description="GPU Performance tool.")
+	# Argument parser for GPU Performance tool
+        parser.add_argument('--metrics-file','-mf', action='store', required = True ,help="CSV file containing metrics")
+        parser.add_argument('--timeline-file','-tf', action='store', required = True ,help="CSV file containing timeline")
+	args = parser.parse_args()
+	return args
+
+
+myargs = parseArguments()
+print myargs
 kpercent = {}
 kflopeff = {}
-with open(filename_1) as csvfile:
+with open(myargs.timeline_file) as csvfile:
     next(csvfile, None) 
     
     reader = csv.DictReader(csvfile)
@@ -27,7 +41,7 @@ with open(filename_1) as csvfile:
       
 
 
-with open(filename_2) as csvfile2:
+with open(myargs.metrics_file) as csvfile2:
     next(csvfile2, None) 
     next(csvfile2, None) 
     reader2 = csv.DictReader(csvfile2)
@@ -46,3 +60,5 @@ for key , value in kpercent.items() :
 
 # Flops percentage of peak
 print("Flops (% peak): ", flopRate/100)
+
+
